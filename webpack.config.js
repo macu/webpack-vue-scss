@@ -8,7 +8,7 @@ module.exports = {
 	],
 	output: {
 		filename: 'app.js',
-		path: __dirname + '/dist',
+		path: __dirname + '/js',
 	},
 	externals: {
 		jquery: 'jQuery',
@@ -22,16 +22,32 @@ module.exports = {
 			},
 			{
 				test: /\.js$/,
-				exclude: /node_modules/,
-				loader: 'babel-loader',
+				exclude: /(node_modules|bower_components)/,
+				use: {
+					loader: 'babel-loader',
+					options: {
+						presets: ['@babel/preset-env'],
+					},
+				},
 			},
-
 			{
 				test: /\.scss$/,
 				use: [
 					MiniCssExtractPlugin.loader,
-					'css-loader',
-					'sass-loader',
+					{
+						loader: 'css-loader',
+						options: {
+							url: false,
+						},
+					},
+					{
+						loader: 'sass-loader',
+						// options: {
+						// 	includePaths: [
+						// 		__dirname + '/bower_components/bootstrap-sass/assets/stylesheets',
+						// 	],
+						// },
+					},
 				]
 			},
 		],
@@ -39,7 +55,7 @@ module.exports = {
 	plugins: [
 		new VueLoaderPlugin(),
 		new MiniCssExtractPlugin({
-			filename: "app.css",
+			filename: '../css/app.css',
 		}),
 	],
 };
